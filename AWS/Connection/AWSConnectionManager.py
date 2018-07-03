@@ -9,3 +9,7 @@ def get_boto3session(profile_name):
 # Returns a client for an AWS service based on the provided service_name and region
 def get_client(session, service_name, region):
     return session.client(service_name, region_name=region)
+
+
+def get_client(profile_name, service_name, region):
+    return boto3.session.Session(profile_name=profile_name).client(service_name, region)
