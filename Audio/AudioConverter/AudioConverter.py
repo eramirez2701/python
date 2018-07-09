@@ -11,8 +11,8 @@ def get_filepaths(directory, extension):
     return filepaths
 
 
-def convert_files(directory, extension, audio_format, audio_codec):
-    filepaths = get_filepaths(directory, extension)
+def convert_files(directory, input_audioextension, audio_format, audio_codec):
+    filepaths = get_filepaths(directory, input_audioextension)
     for filepath in filepaths:
         new_filepath = filepath.with_suffix('.mp3')
         print(filepath)
