@@ -23,5 +23,6 @@ def convert_files(directory, input_audioextension, audio_format, audio_codec):
         input_file.export(new_filepath,
                           format=audio_format,
                           bitrate=audio_codec,
-                          tags=get_tags(fp))
+                          tags=get_tags(str(fp)))
         print("Exported file: " + str(new_filepath))
+
