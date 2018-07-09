@@ -1,7 +1,6 @@
 from pydub import AudioSegment
+from pydub.utils import mediainfo
 import pathlib
-
-AudioSegment.converter = "C:/ffmpeg/bin/ffmpeg.exe"
 
 
 def get_filepaths(directory, extension):
@@ -11,14 +10,18 @@ def get_filepaths(directory, extension):
     return filepaths
 
 
+def get_tags(file_path):
+    return mediainfo(file_path).get('TAG', {})
+
+
 def convert_files(directory, input_audioextension, audio_format, audio_codec):
     filepaths = get_filepaths(directory, input_audioextension)
-    for filepath in filepaths:
-        new_filepath = filepath.with_suffix(audio_format)
-        print(filepath)
-        input_file = AudioSegment.from_file(filepath, input_audioextension)
+    for fp in filepaths:
+        output_extension = '.' + audio_format
+        new_filepath = fp.with_suffix(output_extension)
+        input_file = AudioSegment.from_file(fp, input_audioextension)
         input_file.export(new_filepath,
                           format=audio_format,
-                          bitrate=audio_codec)
+                          bitrate=audio_codec,
+                          tags=get_tags(fp))
         print("Exported file: " + str(new_filepath))
-
