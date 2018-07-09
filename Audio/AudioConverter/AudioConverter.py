@@ -16,7 +16,7 @@ def convert_files(directory, input_audioextension, audio_format, audio_codec):
     for filepath in filepaths:
         new_filepath = filepath.with_suffix(audio_format)
         print(filepath)
-        input_file = AudioSegment.from_file(filepath, input_file)
+        input_file = AudioSegment.from_file(filepath, input_audioextension)
         input_file.export(new_filepath,
                           format=audio_format,
                           bitrate=audio_codec)
