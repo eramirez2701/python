@@ -1,6 +1,7 @@
 from pydub import AudioSegment
 from pydub.utils import mediainfo
 import pathlib
+import gc
 
 
 def get_filepaths(directory, extension):
@@ -17,12 +18,19 @@ def get_tags(file_path):
 def convert_files(directory, input_audioextension, audio_format, audio_codec):
     filepaths = get_filepaths(directory, input_audioextension)
     for fp in filepaths:
-        output_extension = '.' + audio_format
-        new_filepath = fp.with_suffix(output_extension)
-        input_file = AudioSegment.from_file(fp, input_audioextension)
-        input_file.export(new_filepath,
-                          format=audio_format,
-                          bitrate=audio_codec,
-                          tags=get_tags(str(fp)))
-        print("Exported file: " + str(new_filepath))
-
+        try:
+          output_extension = '.' + audio_format
+          new_filepath = fp.with_suffix(output_extension)
+          print('Converting ' + str(fp) + ' to ' + audio_format)
+          input_file = AudioSegment.from_file(fp, input_audioextension)
+          input_file.export(new_filepath,
+                            format=audio_format,
+                            bitrate=audio_codec,
+                            tags=get_tags(str(fp)))
+          print("Exported file: " + str(new_filepath))
+          del input_file
+          gc.collect()
+        except FileNotFoundError:
+            continue
+        except MemoryError:
+            continue
